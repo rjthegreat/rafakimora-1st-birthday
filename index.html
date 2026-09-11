@@ -121,8 +121,8 @@
 
     <!-- BACKGROUND AUDIO -->
     <audio id="bg-music" loop preload="auto">
-    <source src="cdn.pixabay.com/download/audio/2022/05/16/audio_db32a3921b.mp3?filename=magic-in-the-air-112328.mp3" type="audio/mpeg">
-</audio>
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_db32a3921b.mp3?filename=magic-in-the-air-112328.mp3" type="audio/mpeg">
+    </audio>
 
     <!-- AUDIO TOGGLE BUTTON -->
     <div class="fixed bottom-6 right-6 z-40">
@@ -410,12 +410,9 @@
     <!-- SCRIPT CONFIGURATION -->
     <script>
         /* ----------------------------------------------------
-           OPTIONAL CUSTOM AUDIO:
-           To play a specific song, replace the URL below or 
-           upload music.mp3 to your GitHub repository and set:
-           const BACKGROUND_MUSIC_URL = "music.mp3";
+           BACKGROUND FAIRY MUSIC CONFIGURATION
         ---------------------------------------------------- */
-        const BACKGROUND_MUSIC_URL = "cdn.pixabay.com/download/audio/2022/05/16/audio_db32a3921b.mp3?filename=magic-in-the-air-112328.mp3";
+        const BACKGROUND_MUSIC_URL = "https://cdn.pixabay.com/download/audio/2022/05/16/audio_db32a3921b.mp3?filename=magic-in-the-air-112328.mp3";
 
         document.addEventListener("DOMContentLoaded", () => {
             const audioElem = document.getElementById("bg-music");
