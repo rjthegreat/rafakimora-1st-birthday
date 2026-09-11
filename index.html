@@ -120,9 +120,7 @@
     <canvas id="fairy-dust-canvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
 
     <!-- BACKGROUND AUDIO -->
-    <audio id="bg-music" loop preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/05/16/audio_db32a3921b.mp3?filename=magic-in-the-air-112328.mp3" type="audio/mpeg">
-    </audio>
+    <audio id="bg-music" loop preload="auto" src="music.mp3"></audio>
 
     <!-- AUDIO TOGGLE BUTTON -->
     <div class="fixed bottom-6 right-6 z-40">
@@ -410,17 +408,19 @@
     <!-- SCRIPT CONFIGURATION -->
     <script>
         /* ----------------------------------------------------
-           OPTIONAL CUSTOM AUDIO:
-           To play a specific song, replace the URL below or 
-           upload music.mp3 to your GitHub repository and set:
-           const BACKGROUND_MUSIC_URL = "music.mp3";
+           BACKGROUND FAIRY MUSIC CONFIGURATION
         ---------------------------------------------------- */
-        const BACKGROUND_MUSIC_URL = "https://cdn.pixabay.com/download/audio/2022/05/16/audio_db32a3921b.mp3?filename=magic-in-the-air-112328.mp3";
+        const BACKGROUND_MUSIC_URL = "music.mp3";
+        const FALLBACK_MUSIC_URL = "https://ia800908.us.archive.org/19/items/FairyTaleMusicBox/FairyTale.mp3";
 
         document.addEventListener("DOMContentLoaded", () => {
             const audioElem = document.getElementById("bg-music");
-            if (audioElem && BACKGROUND_MUSIC_URL) {
+            if (audioElem) {
                 audioElem.src = BACKGROUND_MUSIC_URL;
+                audioElem.onerror = function() {
+                    console.log("Local music.mp3 not found, using fallback stream.");
+                    audioElem.src = FALLBACK_MUSIC_URL;
+                };
             }
         });
 
@@ -516,21 +516,27 @@
 
         // BACKGROUND AUDIO CONTROLLER
         let isPlaying = false;
-        const bgAudio = document.getElementById('bg-music');
 
         function toggleAudio() {
+            const bgAudio = document.getElementById('bg-music');
+            const audioIcon = document.getElementById('audio-icon');
             if (!bgAudio) return;
             
             if (isPlaying) {
                 bgAudio.pause();
                 isPlaying = false;
-                document.getElementById('audio-icon').className = 'fas fa-music text-xl text-fairy-rose';
+                if (audioIcon) audioIcon.className = 'fas fa-music text-xl text-fairy-rose';
             } else {
                 bgAudio.play().then(() => {
                     isPlaying = true;
-                    document.getElementById('audio-icon').className = 'fas fa-pause text-xl text-fairy-gold';
-                }).catch(e => {
-                    console.log("Autoplay prevented:", e);
+                    if (audioIcon) audioIcon.className = 'fas fa-pause text-xl text-fairy-gold';
+                }).catch(err => {
+                    console.log("Audio playback error, trying fallback...", err);
+                    bgAudio.src = FALLBACK_MUSIC_URL;
+                    bgAudio.play().then(() => {
+                        isPlaying = true;
+                        if (audioIcon) audioIcon.className = 'fas fa-pause text-xl text-fairy-gold';
+                    }).catch(e => console.log("Fallback failed:", e));
                 });
             }
         }
